@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="fas fa-clipboard-check me-2"></i>Register New Complaint</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Complaint Title <span class="text-danger">*</span></label>
+                            <input type="text" name="title" class="form-control" placeholder="Enter complaint title" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Department <span class="text-danger">*</span></label>
+                            <select name="department" class="form-control" required>
+                                <option value="">Select Department</option>
+                                <option value="Roads & Drainage">Roads & Drainage</option>
+                                <option value="Street Light">Street Light</option>
+                                <option value="Water Supply">Water Supply</option>
+                                <option value="Sanitation & Garbage">Sanitation & Garbage</option>
+                                <option value="Public Health">Public Health</option>
+                                <option value="Other Civic Services">Other Civic Services</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description <span class="text-danger">*</span></label>
+                        <textarea name="description" class="form-control" rows="4" placeholder="Describe the issue in detail..." required></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ward Number <span class="text-danger">*</span></label>
+                            <input type="text" name="ward" class="form-control" placeholder="e.g., Ward 5" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Location/Address <span class="text-danger">*</span></label>
+                            <input type="text" name="location" class="form-control" placeholder="e.g., Main Road, Near Park" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Latitude <span class="text-danger">*</span></label>
+                            <input type="text" name="latitude" id="lat" class="form-control" placeholder="Click Get Location" readonly required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Longitude <span class="text-danger">*</span></label>
+                            <input type="text" name="longitude" id="lng" class="form-control" placeholder="Click Get Location" readonly required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-info btn-sm text-white" onclick="getLocation()">
+                            <i class="fas fa-map-marker-alt me-2"></i>Get Current Location
+                        </button>
+                        <span id="location_status" class="text-danger ms-2" style="font-weight: 500;">* Location Required</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Upload Photo (Launches Camera) <span class="text-danger">*</span></label>
+                        <input type="file" name="photo" class="form-control" accept="image/*" capture="environment" required>
+                        <div class="form-text text-muted">Mandatory: Selecting this field opens your native mobile camera environment.</div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Complaint
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function getLocation() {
+    const statusSpan = document.getElementById('location_status');
+    statusSpan.className = "text-warning ms-2";
+    statusSpan.innerText = "Fetching coordinates...";
+    
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        statusSpan.className = "text-danger ms-2";
+        statusSpan.innerText = "Geolocation not supported.";
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function showPosition(position) {
+    document.getElementById('lat').value = position.coords.latitude.toFixed(6);
+    document.getElementById('lng').value = position.coords.longitude.toFixed(6);
+    
+    const statusSpan = document.getElementById('location_status');
+    statusSpan.className = "text-success ms-2";
+    statusSpan.innerText = "✓ Location Captured!";
+}
+
+function showError(error) {
+    const statusSpan = document.getElementById('location_status');
+    statusSpan.className = "text-danger ms-2";
+    statusSpan.innerText = "Capture failed.";
+    alert("Error getting location: " + error.message);
+}
+
+// Simple Bootstrap Form HTML5 Validation Triggers
+(() => {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
+{% endblock %}

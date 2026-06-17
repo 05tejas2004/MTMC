@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center d-print-none">
+    <div class="col-md-8">
+        <div class="card border-success shadow-sm">
+            <div class="card-header bg-success text-white py-3">
+                <h4 class="mb-0"><i class="fas fa-check-circle me-2"></i>Complaint Filed Successfully!</h4>
+            </div>
+            <div class="card-body p-4">
+                
+                <div class="alert alert-success mb-4">
+                    <strong>Grievance Reference ID:</strong> <span class="text-monospace font-weight-bold">#{{ complaint['complaint_id'] }}</span><br>
+                    <small class="text-muted">Your record has been locked into the municipal database registry.</small>
+                </div>
+
+                <table class="table table-bordered">
+                    <tr>
+                        <th width="30%">Title</th>
+                        <td>{{ complaint['category'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Department</th>
+                        <td>{{ complaint['department'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ complaint['description'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Ward / Location</th>
+                        <td>Ward {{ complaint['ward'] }} - {{ complaint['location'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>GPS Coordinates</th>
+                        <td>{{ complaint['latitude'] }}, {{ complaint['longitude'] }}</td>
+                    </tr>
+                </table>
+
+                <div class="row g-2 mt-3">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-success btn-lg w-100" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i>Print / Save PDF
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-lg w-100">
+                            <i class="fas fa-home me-2"></i>Go to Dashboard
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="print-receipt-engine" class="d-none d-print-block">
+    <div style="border: 2px solid #198754; padding: 30px; font-family: 'Poppins', Arial, sans-serif; border-radius: 8px;">
+        
+        <div style="border-bottom: 3px double #198754; padding-bottom: 15px; margin-bottom: 25px; text-align: center;">
+            <h2 style="margin: 0; color: #198754; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">
+                Malabennur Town Municipal Council
+            </h2>
+            <p style="margin: 5px 0 0; color: #666; font-size: 14px; font-weight: 500; letter-spacing: 0.5px;">
+                Official Grievance Management System Receipt
+            </p>
+        </div>
+
+        <div style="background: #f8f9fa; border-left: 5px solid #198754; padding: 15px; margin-bottom: 30px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 14px;">
+                <tr>
+                    <td><strong>Grievance ID:</strong> <span style="color: #d63384; font-family: monospace; font-size: 16px; font-weight: bold;">#{{ complaint['complaint_id'] }}</span></td>
+                    <td align="right"><strong>Date Filed:</strong> <span id="printTimestamp"></span></td>
+                </tr>
+                <tr>
+                    <td style="padding-top: 5px;"><strong>Filer Name:</strong> {{ complaint['citizen_name'] }}</td>
+                    <td align="right" style="padding-top: 5px;"><strong>Status:</strong> Active / Submitted</td>
+                </tr>
+            </table>
+        </div>
+
+        <h3 style="color: #198754; border-bottom: 1px solid #dee2e6; padding-bottom: 5px; font-size: 16px; margin-bottom: 15px;">
+            Grievance Metadata Details
+        </h3>
+        
+        <table width="100%" cellpadding="8" cellspacing="0" style="font-size: 14px; margin-bottom: 25px; border-collapse: collapse;">
+            <tr style="border-bottom: 1px solid #edf2f7;">
+                <td width="25%" style="font-weight: 600; color: #4a5568; padding-left: 0;">Complaint Title:</td>
+                <td style="color: #2d3748; font-weight: bold;">{{ complaint['category'] }}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #edf2f7;">
+                <td style="font-weight: 600; color: #4a5568; padding-left: 0;">Department:</td>
+                <td style="color: #2d3748;">{{ complaint['department'] }}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #edf2f7;">
+                <td style="font-weight: 600; color: #4a5568; padding-left: 0; vertical-align: top;">Description:</td>
+                <td style="color: #2d3748; text-align: justify; line-height: 1.5; white-space: pre-line;">{{ complaint['description'] }}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #edf2f7;">
+                <td style="font-weight: 600; color: #4a5568; padding-left: 0;">Municipal Ward:</td>
+                <td style="color: #2d3748;">Ward {{ complaint['ward'] }}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #edf2f7;">
+                <td style="font-weight: 600; color: #4a5568; padding-left: 0;">Site Landmark Location:</td>
+                <td style="color: #2d3748;">{{ complaint['location'] }}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #edf2f7;">
+                <td style="font-weight: 600; color: #4a5568; padding-left: 0;">GPS Tracking:</td>
+                <td style="color: #2d3748; font-family: monospace;">Latitude: {{ complaint['latitude'] }} / Longitude: {{ complaint['longitude'] }}</td>
+            </tr>
+        </table>
+
+        <div style="margin-top: 60px; padding-top: 15px; border-top: 1px dashed #cbd5e0; text-align: center; font-size: 11px; color: #a0aec0;">
+            This is a system-generated document authorized by the MTMC Grievance Portal. No physical signature required.
+        </div>
+    </div>
+</div>
+
+<style>
+@media print {
+    /* 1. Hide every single base layout element from the layout tree */
+    html, body, .sidebar, .top-header, .main-content, .page-content, .app-wrapper, .navbar, nav, aside, footer, header {
+        visibility: hidden !important;
+        height: auto !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* 2. Target the standalone receipt and pull it right up to the top left of the sheet canvas */
+    #print-receipt-engine {
+        visibility: visible !important;
+        display: block !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        padding: 20px !important;
+    }
+}
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Set dynamic date parameters across output display targets safely
+        const now = new Date();
+        const outputStr = now.toLocaleDateString() + " " + now.toLocaleTimeString();
+        document.getElementById('printTimestamp').innerText = outputStr;
+
+        // Give the page 1 second to fully render and calculate layouts before invoking the print manager
+        setTimeout(function() {
+            window.print();
+        }, 1000);
+    });
+</script>
+{% endblock %}

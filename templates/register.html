@@ -1,0 +1,45 @@
+{% extends "auth.html" %}
+
+{% block auth_content %}
+<form method="POST">
+    <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input type="text" name="name" class="form-control" placeholder="Enter your full name" required>
+        </div>
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Mobile Number</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+            <input type="text" name="mobile" class="form-control" placeholder="Enter mobile number" required>
+        </div>
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Email Address</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+        </div>
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" name="password" class="form-control" placeholder="Create a strong password" required>
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-login">
+        <i class="fas fa-user-plus me-2"></i> Register Now
+    </button>
+</form>
+
+<div class="register-link">
+    Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+</div>
+{% endblock %}

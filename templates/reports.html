@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .stat-box { background: white; border-radius: 12px; padding: 25px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+    .stat-box h3 { font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 10px; }
+    .stat-box .value { font-size: 2.5rem; font-weight: 700; color: #4B0082; }
+    .report-table { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+    .report-table th { background: linear-gradient(135deg, #4B0082, #6A0DAD); color: white; padding: 15px; }
+    .report-table td { padding: 15px; border-bottom: 1px solid #eee; }
+    .report-table tr:hover { background: #f8f9fa; }
+    .export-btn { background: linear-gradient(135deg, #4CAF50, #8BC34A); border: none; }
+    .export-btn:hover { background: linear-gradient(135deg, #45a049, #7cb342); }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-4" style="color: #4B0082;">Reports & Analytics</h2>
+
+<!-- Stats Row -->
+<div class="row mb-4 g-4">
+    <div class="col-md-4">
+        <div class="stat-box">
+            <h3>Total Complaints</h3>
+            <div class="value">{{ total }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-box">
+            <h3>Resolved</h3>
+            <div class="value" style="color: #4CAF50;">{{ resolved }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-box">
+            <h3>Pending</h3>
+            <div class="value" style="color: #FF9800;">{{ pending }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row mb-4 g-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Department-wise Complaints</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="deptChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Resolution Rate</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Complaints Table -->
+<div class="report-table">
+    <div class="d-flex justify-content-between align-items-center p-3" style="background: #f8f9fa; border-bottom: 1px solid #eee;">
+        <h5 class="m-0">Recent Complaints</h5>
+        <a href="{{ url_for('export_excel') }}" class="btn export-btn text-white btn-sm">
+            <i class="fas fa-file-excel me-2"></i>Export Excel
+        </a>
+    </div>
+    <table class="table mb-0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Department</th>
+                <th>Ward</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in complaints[:10] %}
+            <tr>
+                <td>{{ c.complaint_id }}</td>
+                <td>{{ c.category }}</td>
+                <td>{{ c.department }}</td>
+                <td>{{ c.ward }}</td>
+                <td>
+                    <span class="badge bg-{{ 'success' if c.status == 'Resolved' else 'warning' if c.status == 'In Progress' else 'primary' }}">
+                        {{ c.status }}
+                    </span>
+                </td>
+                <td>{{ c.created_at.strftime('%Y-%m-%d') if c.created_at else 'N/A' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Department Bar Chart
+    var deptCtx = document.getElementById('deptChart').getContext('2d');
+    new Chart(deptCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ dept_stats|map(attribute='department')|list }},
+            datasets: [{
+                label: 'Complaints',
+                data: {{ dept_stats|map(attribute='count')|list }},
+                backgroundColor: ['#4B0082', '#FF9800', '#4CAF50', '#2196F3', '#9C27B0']
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    // Pie Chart
+    var pieCtx = document.getElementById('pieChart').getContext('2d');
+    new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Resolved', 'Pending'],
+            datasets: [{ data: [{{ resolved }}, {{ pending }}], backgroundColor: ['#4CAF50', '#FF9800'] }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+</script>
+{% endblock %}

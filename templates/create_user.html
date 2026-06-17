@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center my-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header text-white px-4 py-3" style="background: linear-gradient(135deg, #4B0082 0%, #6A0DAD 100%);">
+                <h4 class="mb-0 fs-5"><i class="fas fa-user-plus me-2"></i>Create New Organizational User</h4>
+            </div>
+            <div class="card-body p-4 bg-white">
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ category }} alert-dismissible fade show small" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-secondary small">Full Name</label>
+                        <input type="text" name="name" class="form-control" placeholder="e.g. Inspector Alpha" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-secondary small">Email Address</label>
+                        <input type="email" name="email" class="form-control" placeholder="username@muni.gov" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-secondary small">Mobile Number</label>
+                        <input type="text" name="mobile" class="form-control" placeholder="10-digit mobile sequence" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-secondary small">Account Password</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-secondary small">System Authority Role</label>
+                        <select name="role" class="form-select" id="roleSelect" onchange="toggleDepartment()" required>
+                            <option value="citizen" selected>Citizen</option>
+                            <option value="health_inspector">Health Inspector (L1)</option>
+                            <option value="senior_health_inspector">Senior Health Inspector (L1)</option>
+                            <option value="environment_engineer">Environment Engineer (L2)</option>
+                            <option value="chief_officer">Chief Officer (L3)</option>
+                            <option value="admin">Admin / Commissioner</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4" id="departmentField" style="display: none;">
+                        <label class="form-label fw-semibold text-secondary small">Assigned Council Department</label>
+                        <select name="department" class="form-select">
+                            <option value="Health">Health & Sanitation</option>
+                            <option value="Public Works">Public Works & Infrastructure</option>
+                            <option value="Revenue">Revenue Department</option>
+                            <option value="Administration">Administration Branch</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn text-white w-100 fw-bold py-2 rounded-3" style="background-color: #6A0DAD;">
+                        Provision System User Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleDepartment() {
+    var role = document.getElementById('roleSelect').value;
+    var deptField = document.getElementById('departmentField');
+    
+    // Admin & Citizen don't explicitly require fixed department assignment pipelines
+    if (role === 'citizen' || role === 'admin') {
+        deptField.style.display = 'none';
+    } else {
+        deptField.style.display = 'block';
+    }
+}
+
+// Fire once on load to ensure initial state consistency
+document.addEventListener("DOMContentLoaded", toggleDepartment);
+</script>
+{% endblock %}

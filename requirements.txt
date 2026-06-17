@@ -1,0 +1,9 @@
+flask
+flask-login
+flask-session
+pymongo
+python-dotenv
+werkzeug
+dnspython
+requests
+leaflet

@@ -1,0 +1,121 @@
+/* Municipal Grievance System - Custom Styles */
+
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --success-color: #2ecc71;
+    --warning-color: #f1c40f;
+    --danger-color: #e74c3c;
+    --light-bg: #f4f6f9;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--light-bg);
+}
+
+/* Sidebar Styles */
+.sidebar {
+    height: 100vh;
+    background: var(--primary-color);
+    color: white;
+    position: fixed;
+    width: 250px;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.sidebar h4 {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #34495e;
+}
+
+.sidebar a {
+    color: #bdc3c7;
+    text-decoration: none;
+    display: block;
+    padding: 12px 20px;
+    transition: all 0.3s;
+}
+
+.sidebar a:hover, .sidebar a.active {
+    background: #34495e;
+    color: white;
+    border-left: 4px solid var(--secondary-color);
+}
+
+/* Content Area */
+.content {
+    margin-left: 250px;
+    padding: 30px;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    border-left: 5px solid var(--secondary-color);
+    border-radius: 8px;
+}
+
+.stat-card.pending {
+    border-color: var(--warning-color);
+}
+
+.stat-card.resolved {
+    border-color: var(--success-color);
+}
+
+/* Tables */
+.table-card {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+/* Badges */
+.badge {
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+/* Map Container */
+#map {
+    height: 500px;
+    border-radius: 8px;
+}
+
+/* Form Styles */
+.form-control:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+/* Footer */
+.footer {
+    background: var(--primary-color);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    margin-top: 40px;
+}
