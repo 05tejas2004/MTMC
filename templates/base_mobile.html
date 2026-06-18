@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Prevents double-tap zooming behaviors and forces native mobile scaling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <!-- iOS Status Bar Customization -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <title>Grievance Portal Mobile</title>
+
+    <!-- Framework Imports (Bootstrap 5 & FontAwesome Icons) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Mobile System UI Optimization Rules */
+        body {
+            background-color: #f4f6f9;
+            color: #212529;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding-bottom: 75px; /* Creates clean buffer space for the sticky bottom system navbar */
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent; /* Removes blue box flickering on button taps */
+        }
+
+        /* Fixed Mobile Top App Header Bar */
+        .mobile-top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+            background-color: #ffffff;
+            border-bottom: 1px solid #eef2f5;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+        }
+
+        .mobile-top-bar .brand-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0d6efd;
+            margin: 0;
+            letter-spacing: -0.3px;
+        }
+
+        /* Fixed Mobile Tab Controller Strip (Bottom Nav Bar) */
+        .mobile-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 65px;
+            background-color: #ffffff;
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+            border-top: 1px solid #edf2f7;
+            z-index: 1030;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: env(safe-area-inset-bottom); /* Fix for iOS Home Indicator bars */
+        }
+
+        .mobile-nav-item {
+            text-decoration: none;
+            color: #8a94a6;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 20%;
+            height: 100%;
+            transition: color 0.15s ease-in-out;
+        }
+
+        .mobile-nav-item.active {
+            color: #0d6efd;
+        }
+
+        .mobile-nav-item i {
+            font-size: 1.25rem;
+            margin-bottom: 3px;
+        }
+
+        /* Center primary actionable dynamic layout button */
+        .mobile-nav-item.center-action {
+            position: relative;
+            top: -12px;
+            background: #0d6efd;
+            color: #ffffff !important;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.35);
+            border: 4px solid #ffffff;
+        }
+        .mobile-nav-item.center-action i {
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        /* Dynamic System Status Layout Configurations for Modals and Forms */
+        .card {
+            border-radius: 12px !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Mobile Screen Context Header Component -->
+    <header class="mobile-top-bar d-print-none">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-landmark text-primary me-2 fs-5"></i>
+            <h1 class="brand-title">MTC Portal</h1>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-light rounded-circle p-2 position-relative" aria-label="Notifications">
+                <i class="fas fa-bell text-secondary"></i>
+                <span class="position-absolute top-1 start-75 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Primary Mobile App Viewport Body Dynamic Grid -->
+    <main class="main-app-viewport">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Persistent Bottom Mobile UI Command Navigation Strip -->
+    <nav class="mobile-bottom-nav d-print-none">
+        <a href="/" class="mobile-nav-item active">
+            <i class="fas fa-th-large"></i>
+            <span>Workspace</span>
+        </a>
+        <a href="#" class="mobile-nav-item">
+            <i class="fas fa-search"></i>
+            <span>Track</span>
+        </a>
+        <!-- Native Style Raised Call to Action (CTA) Button -->
+        <a href="#" class="mobile-nav-item center-action" title="File New Complaint">
+            <i class="fas fa-plus"></i>
+        </a>
+        <a href="#" class="mobile-nav-item">
+            <i class="fas fa-info-circle"></i>
+            <span>Helpline</span>
+        </a>
+        <a href="#" class="mobile-nav-item">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Script Deliverables Framework Loading Stack -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

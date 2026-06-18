@@ -7,3 +7,4 @@ werkzeug
 dnspython
 requests
 leaflet
+gunicorn
