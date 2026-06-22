@@ -1,0 +1,21 @@
+<nav class="mobile-bottom-nav d-print-none">
+    <a href="{{ url_for('dashboard') }}" class="mobile-nav-item {% if request.endpoint == 'dashboard' and request.path != '/new_complaint' %}active{% endif %}">
+        <i class="fas fa-th-large"></i>
+        <span>Workspace</span>
+    </a>
+    <a href="#track" class="mobile-nav-item">
+        <i class="fas fa-search"></i>
+        <span>Track</span>
+    </a>
+    <a href="{{ url_for('new_complaint') }}" class="mobile-nav-item center-action" title="File New Complaint">
+        <i class="fas fa-plus"></i>
+    </a>
+    <a href="#helpline" class="mobile-nav-item">
+        <i class="fas fa-info-circle"></i>
+        <span>Helpline</span>
+    </a>
+    <a href="#profile" class="mobile-nav-item">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+    </a>
+</nav>

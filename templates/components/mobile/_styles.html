@@ -1,0 +1,87 @@
+<style>
+    /* --- MOBILE SPECIFIC APPLICATION ELEMENTS --- */
+    .mobile-top-bar {
+        position: sticky;
+        top: 0;
+        z-index: 1020;
+        background-color: #ffffff;
+        border-bottom: 1px solid #eef2f5;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        display: none;
+    }
+
+    .mobile-top-bar .brand-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin: 0;
+        letter-spacing: -0.3px;
+    }
+
+    .mobile-bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 65px;
+        background-color: #ffffff;
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+        border-top: 1px solid #edf2f7;
+        z-index: 9999 !important;
+        pointer-events: auto !important;
+        display: none;
+        justify-content: space-around;
+        align-items: center;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .mobile-nav-item {
+        text-decoration: none;
+        color: #8a94a6;
+        font-size: 0.7rem;
+        font-weight: 600;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 20%;
+        height: 100%;
+        transition: color 0.15s ease-in-out;
+        position: relative;
+        z-index: 10000 !important;
+        pointer-events: auto !important;
+    }
+
+    .mobile-nav-item.active { color: var(--primary); }
+    .mobile-nav-item i { font-size: 1.25rem; margin-bottom: 3px; }
+
+    .mobile-nav-item.center-action {
+        position: relative;
+        top: -12px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: #ffffff !important;
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        box-shadow: 0 4px 12px rgba(75, 0, 130, 0.35);
+        border: 4px solid #ffffff;
+        z-index: 10005 !important;
+    }
+    .mobile-nav-item.center-action i { font-size: 1.4rem; margin: 0; }
+
+    @media (max-width: 992px) {
+        {% if current_user.is_authenticated and current_user.role == 'citizen' %}
+            body { padding-bottom: 85px; }
+            .sidebar { display: none !important; }
+            .main-content { margin-left: 0 !important; width: 100% !important; }
+            .top-header { display: none !important; }
+            .mobile-top-bar { display: flex !important; }
+            .mobile-bottom-nav { display: flex !important; }
+            .page-content { padding: 16px; }
+        {% endif %}
+    }
+</style>
