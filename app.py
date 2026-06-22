@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 import sqlite3
 from datetime import datetime, timedelta
 import os
+import random
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -71,7 +72,50 @@ def init_db():
     except Exception as e:
         print(f"❌ Database Connection/Initialization Error: {e}")
         return False
-# Add these new columns dynamically if they do not exist, or ensure init_db creates them:
+
+# ================= MERGED SEEDING LOGIC =================
+def seed_database():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Check if data already exists to avoid duplicate seeding
+    cursor.execute("SELECT count(*) FROM users")
+    if cursor.fetchone()[0] > 0:
+        conn.close()
+        return
+
+    print("🚀 Seeding database...")
+    users_data = [
+        ('Municipal Commissioner', 'admin@muni.gov', '1234567890', 'admin123', 'admin', 'Administration'),
+        ('Health Inspector Alpha', 'health@muni.gov', '9000000001', 'health123', 'health_inspector', 'Health'),
+        ('Sr. Health Inspector Beta', 'srhealth@muni.gov', '9000000002', 'health123', 'senior_health_inspector', 'Health'),
+        ('Environment Engineer Gamma', 'engineer@muni.gov', '9000000003', 'engineer123', 'environment_engineer', 'Public Works'),
+        ('Chief Officer Delta', 'chief@muni.gov', '9000000004', 'chief123', 'chief_officer', 'Administration'),
+        ('Test Citizen', 'citizen@test.com', '7778889990', 'citizen123', 'citizen', None)
+    ]
+
+    for name, email, mobile, password, role, dept in users_data:
+        cursor.execute('''INSERT INTO users (name, email, mobile, password, role, department, status)
+            VALUES (?, ?, ?, ?, ?, ?, 'active')''', (name, email, mobile, generate_password_hash(password), role, dept))
+
+    now = datetime.now()
+    complaints_data = [
+        ('Garbage Pile Accumulation', 'Huge trash build-up.', 'John Doe', 'Health', 'Ward 4', (now - timedelta(hours=12)).strftime('%Y-%m-%d %H:%M:%S')),
+        ('Water Pipeline Leakage', 'Main line broken.', 'Jane Smith', 'Public Works', 'Ward 2', (now - timedelta(hours=60)).strftime('%Y-%m-%d %H:%M:%S')),
+        ('Illegal Industrial Dumping', 'Toxic chemical waste.', 'Bob Johnson', 'Public Works', 'Ward 7', (now - timedelta(hours=110)).strftime('%Y-%m-%d %H:%M:%S'))
+    ]
+
+    for category, desc, citizen, dept, ward, created_at in complaints_data:
+        comp_id = f"COMP-{datetime.now().strftime('%Y%m%d%H%M')}-{random.randint(1000, 9999)}"
+        cursor.execute('''INSERT INTO complaints (complaint_id, citizen_id, citizen_name, category, description, department, 
+                ward, location, latitude, longitude, status, created_at) VALUES (?, '5', ?, ?, ?, ?, ?, 'Town Hall', '14.8', '75.8', 'Submitted', ?)''', 
+                (comp_id, citizen, category, desc, dept, ward, created_at))
+    
+    conn.commit()
+    conn.close()
+    print("🎉 Database seeding completed!")
+
+# Add these new columns dynamically
 def patch_db_for_resolution():
     conn = get_db_connection()
     try:
@@ -80,12 +124,16 @@ def patch_db_for_resolution():
         conn.execute("ALTER TABLE complaints ADD COLUMN resolution_notes TEXT;")
         conn.commit()
     except sqlite3.OperationalError:
-        # Columns already exist
         pass
     conn.close()
 
-# Run the patch right under your init_db() block
+# Initialize everything on start
+init_db()
 patch_db_for_resolution()
+seed_database()
+
+# ... (Keep the rest of your app.py routes and code below this point)
+# Ensure you keep your existing route definitions here as they were in the original file
 
 # ----------------------------------------------------
 # ROUTE: VIEW COMPLAINT DETAILS
